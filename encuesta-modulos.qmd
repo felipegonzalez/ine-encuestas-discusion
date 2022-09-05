@@ -1,0 +1,384 @@
+---
+title: "Encuesta de módulos: exploración"
+author: "F González"
+format: 
+  html:
+    lang: es
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+Lectura de datos: encuestas
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(lubridate)
+library(survey)
+library(srvyr)
+library(patchwork)
+# datos encuestas
+encuesta_tbl <- read_csv("datos/modulos/1_Ponderadores/Resultados8_encuesta_registros_ponderadores.csv") |> 
+    mutate(registrado_sistema = !is.na(Ponderador_sol_cred)) ## variable correcta?
+# turnos censados
+turnos_tbl <- read_csv("datos/modulos/1_Ponderadores/Datos_Modulos19_Muestra.csv")
+```
+
+Leer datos cecyrd:
+
+```{r}
+# quitar modulos 60, 61 y 91
+datos_cecyrd <- read_delim(
+  "datos/modulos/1_Ponderadores/Datos_SOLICITUDES_ENTREGAS_CPV_281019_AL_101119.txt", 
+   delim = "|", 
+   escape_double = FALSE, 
+   col_types = cols(FECHA_CREACION_MAC = col_datetime(format = "%d/%m/%Y %H:%M:%S"), 
+   FECHA_ENTREGA_CREDENCIAL = col_datetime(format = "%d/%m/%Y %H:%M:%S"), 
+    FUAR = col_character(), MODULO_IFE_ID = col_character()),
+    trim_ws = TRUE) |> 
+  mutate(Edo = str_sub(MODULO_IFE_ID, 1, 2)) |> 
+  mutate(Dtto = str_sub(MODULO_IFE_ID, 3, 4)) |> 
+  mutate(id_adicional = str_sub(MODULO_IFE_ID, 5, 6)) |> 
+  filter(id_adicional %in% c("51", "52", "53", "54", "55", "56", "57"))
+```
+
+Construir marco de cecyrd
+
+```{r}
+modulos_marco_cec <- datos_cecyrd |> 
+  group_by(MODULO_IFE_ID, Edo, Dtto) |> 
+  summarise(n_registro = n(), .groups = "drop")
+modulos_distrito <- modulos_marco_cec |> 
+  group_by(Edo, Dtto) |> 
+  summarise(n_modulos = n(), .groups = "drop")
+```
+
+## Replicar resultados no ponderados
+
+Motivo de visita, sin ponderar (replicar Gráfica 4 y Gráfica 5)
+
+```{r}
+# Grafica 4
+tabla_4 <- encuesta_tbl |>  
+  count(m_cuest2) |>
+  mutate(p = round(100 * n / sum(n), 2)) 
+tabla_4
+#Gráfica 5
+tabla_5 <- encuesta_tbl |> group_by(tipo_modulo) |> 
+  count(m_cuest2) |>
+  mutate(p = round(100 * n / sum(n), 1)) 
+tabla_5
+g5_no_pond <- ggplot(tabla_5, aes(x = tipo_modulo, y = p, 
+  fill = factor(m_cuest2), label = p)) + 
+  geom_col() + geom_text(position = position_stack(vjust = 0.5))
+g5_no_pond
+```
+
+## Resultados con diseño (primera aproximación)
+
+Utilizando el diseño planteado en la sección de metodología,
+consideramos la expansión que tal diseño sugiere, donde los factores de
+expansión a nivel unidad primaria son dados por el número de distritos,
+el número de módulos dentro de cada distrito, y le número de días para
+el que se pretende hacerla expansión.
+
+Las unidades secundarias son días-módulo, y buscamos hacer expansión a
+Lunes-Viernes del 28 de octubre al 8 de noviembre (10 días).
+
+Sin embargo, hacemos las siguientes observaciones, en cuanto a la no
+realización del **censo dentro de cada módulo** seleccionado. Ambas
+observaciones apuntan hacia simplificar el trabajo administrativo y acercar
+más el diseño a uno probabilístico:
+
+
+1. **No respuesta por carga de trabajo**. Puede considerarse algún tipo de muestreo sistemático dentro de los
+    módulos, pues según los registros, no se alcanza a capturar todos
+    los visitantes, incluso sólo considerando aquellos que corresponden
+    a solicitudes y entregas de credenciales. Muestrear a este nivel de una
+    manera simple, cercana a aleatoria, puede aliviar simplificar la operación,
+    y obtener resultados más cercanos a selección probabilística.
+
+Acerca de los días de visita y turnos:
+
+2. **Selección no aleatoria de días y falta de información de segundos turnos**. Los días de visita para cada módulo podrían
+    seleccionarse aleatoriamente. Si existe más de un turno puede recopilarse
+    información de ambos turnos o seleccionar uno al azar.
+
+Finalmente, acerca de los módulos itinerantes:
+
+3. **Mecanismo de selección de itinerantes**. Es posible hacer estimaciones separadas por módulos fijos e
+    intinerantes bajo el diseño actual. Sin embargo, calcular varianzas
+    para los agregados no es directo a menos que se conozca el
+    procedimiento exacto para su selección, y cómo depende del módulo
+    fijo seleccionado.
+  -   Si es apropiado, esto se puede mejorar agrupando en un principio
+    módulos que son seleccionados juntos, y considerándolos como una
+    unidad completa.
+  -   En otro caso, tenemos que conocer la probabilidad condicional de
+    seleccionar cada módulo itinerante dado que seleccionó cada uno
+    de los módulos fijos.
+
+
+
+Para el siguiente ejercicio, utilizaremos:
+
+1.  Estratificación: es necesario usar la estratificación CMDX-NoCDMX.
+
+2.  Consideramos las UPMs como distritos,
+
+3.  El ponderador es el número de días de trabajo para los módulos de la
+    CDMX y es $(276/26)*(N_i/n_i)*d_i$ donde $N_i$ es
+    el número de módulos en cada distrito, $n_i$ el número de módulos seleccionados en muestra para el distrito,  y $d_i$ es el
+    número de días que el módulo estuvo operando.
+
+4. Sólo se visita un turno (el primero). Estrictamente, **sólo podemos hacer
+estimaciones para los primeros turnos de la población de módulos**.
+Más adelante proponemos una corrección parcial de esto, pero sería mejor
+visitar los dos turnos o seleccionar en la muestra distintos turnos al azar.
+
+5.  Ignoramos la no respuesta: en algunos módulos no fueron capturados todos los visitantes (de manera no controlada).
+
+6.  Tomamos como seleccionados al azar de manera independiente los
+    módulos itinerantes. Esto no es correcto por la construcción del
+    diseño, y puede afectar las varianzas estimadas.
+7.  Sin embargo, el análisis puede llevarse a cabo sólo con los módulos
+    fijos, y en ese caso el supuesto solo es el (4), de no respuesta
+    ignorable.
+
+Cálculo de probabilidad de selección:
+
+```{r}
+#| message: false
+num_modulos_tbl <- group_by(encuesta_tbl, Edo, Dtto) |> 
+  summarise(n_selec = n_distinct(modulo)) |> ungroup()
+encuesta_pesos_tbl <- encuesta_tbl |> 
+  left_join(num_modulos_tbl) |> 
+  mutate(dias_trabajados = dias_trabajados_sem1 + dias_trabajados_sem2) |>
+  group_by(Origen) |> 
+  mutate(dias_trabajados_estrato = sum(dias_trabajados)) |> 
+  ungroup() |> 
+  left_join(modulos_distrito) |> 
+  left_join(turnos_tbl |> select(modulo = MODULO_IFE_ID, turnos = TURNOS) |> 
+              mutate(modulo = str_pad(modulo, 6, pad = "0"))) |> 
+  mutate(turnos = ifelse(is.na(turnos), 2, turnos)) |> 
+  #selección de distrito y módulos
+  mutate(p = ifelse(Edo != "09", (n_selec/n_modulos)*(26/276), 1)) |> 
+  #selección de día de trabajo
+  mutate(p = p / (dias_trabajados)) 
+```
+
+Definición de diseño:
+
+```{r}
+dis_modulos <- svydesign(ids = ~Dtto, strata = ~Origen, 
+  probs = ~ p, data = encuesta_pesos_tbl, nest = TRUE) |> 
+  as_survey_design()
+```
+
+Análisis ponderado y no ponderado:
+
+```{r}
+tabla_5_dis <- dis_modulos |>
+  group_by(tipo_modulo, m_cuest2) |> 
+  summarise(cat_1 = round(100 * survey_prop(vartype = "ci"), 2)) 
+tabla_5_dis
+g5_pond_1 <- ggplot(tabla_5_dis, aes(x = tipo_modulo, y = cat_1, 
+  fill = factor(m_cuest2), label = cat_1)) + 
+  geom_col() + geom_text(position = position_stack(vjust = 0.5)) +
+  ggtitle("Ponderado 1")
+g5_no_pond <- g5_no_pond + ggtitle("No ponderado")
+g5_no_pond + g5_pond_1 + plot_layout(guides = 'collect')
+```
+
+Especialmente para itinerantes, el error estimado es grande. Las
+estimaciones no son iguales ponderando de esta manera que sin ponderar.
+Una nota importante es que es importante separar el estrato de CDMX en
+estos datos, pues en otro caso resultan sobrerrepresentados.
+
+- *Nota*: incluye expansión a dos turnos a partir del primero solamente. Esto
+no está bien justificado, y pueden muestrearse segundos turnos también, o restringir
+la inferencia a primer turno.
+
+## Estimación de otras cantidades y no respuesta
+
+Para estimar totales, podemos ajustar por la no respuesta del censo. Si
+hacemos:
+
+```{r}
+dis_modulos |>
+  group_by(registrado_sistema) |> 
+  survey_tally(vartype = "ci") 
+```
+
+En primer lugar, estimación puede ser baja, por la siguiente razón, por no
+respuesta y porque estamos ignorando el segundo turno.
+
+Consideramos todas las solicitudes y entregas registradas en cecyrd,
+
+```{r}
+datos_cecyrd_creacion <- datos_cecyrd |> select(FUAR, MODULO_IFE_ID, fecha = FECHA_CREACION_MAC) 
+datos_cecyrd_entrega <- datos_cecyrd |> select(FUAR, MODULO_IFE_ID, fecha = FECHA_ENTREGA_CREDENCIAL)
+datos_fecha_cec <- bind_rows(datos_cecyrd_creacion, datos_cecyrd_entrega) |> 
+  mutate(fecha = as.Date(fecha)) |> select(modulo = MODULO_IFE_ID, fecha = fecha)
+datos_encuesta_cec <- semi_join(
+  datos_fecha_cec |> ungroup(), 
+  encuesta_pesos_tbl |> ungroup() |> 
+  select(modulo, fecha = Dia_Trabajado) |> 
+  filter(!is.na(fecha))
+)
+datos_resumen_cec <- datos_encuesta_cec |> 
+  group_by(modulo, fecha) |> 
+  summarise(n_registros = n(), .groups = "drop")
+```
+
+```{r}
+encuesta_modulos_tbl <- encuesta_pesos_tbl |> 
+  group_by(Origen, Edo, Dtto, modulo, tipo_modulo, Dia_Trabajado, registrado_sistema) |> 
+  summarise(n = n(), .groups = "drop") |> 
+  mutate(fecha = ymd(Dia_Trabajado)) |> 
+  filter(!is.na(Dia_Trabajado)) |> 
+  filter(registrado_sistema) 
+comparacion_tbl <- left_join(encuesta_modulos_tbl, datos_resumen_cec) |> 
+  mutate(dia_sem = weekdays(fecha)) |> 
+  mutate(factor = n_registros / n)
+```
+
+La siguiente gráfica muestra que no se capturan en la encuesta todas las
+entradas del cecyrd
+
+```{r}
+ggplot(comparacion_tbl, aes(x = n_registros, y = n)) + geom_point() +
+  geom_smooth(method = "lm", formula = y ~ -1 + x) + geom_abline() + facet_wrap(~ Origen)
+lm(n ~ -1 + Origen:n_registros, comparacion_tbl)
+```
+
+Agregamos el factor correspondiente para este subregistro:
+
+```{r}
+encuesta_pesos_tbl <- encuesta_pesos_tbl |> 
+  left_join(comparacion_tbl |> select(modulo, factor)) |> 
+  mutate(p_factor = p / factor)
+dis_modulos_2 <- svydesign(ids = ~Dtto, strata = ~Origen, 
+  probs = ~ p_factor, data = encuesta_pesos_tbl, nest = TRUE) |> 
+  as_survey_design()
+```
+
+Bajo los supuestos mostrados arriba, intentaremos estimaciones del total
+de personas que acudieron a los módulos en la semana de interés, por
+tipo de módulo. Con el factor adicional por selección de personas,
+obtenemos:
+
+```{r}
+dis_modulos_2 |>
+  survey_tally(vartype = "ci")
+dis_modulos_2 |>
+  group_by(registrado_sistema) |> 
+  survey_tally(vartype = "ci")
+dis_modulos_2 |>
+  group_by(tipo_modulo) |> 
+  survey_tally(vartype = "ci")
+```
+
+**Nota**: Estas estimaciones tienen alto grado de incertidumbre. Veremos
+ más adelante cómo utilizar la información auxiliar de cecyrd para construir
+ un mejor estimador de razón.
+
+```{r}
+#| code-fold: true
+#encuesta_pesos_tbl |> 
+#  group_by(Origen) |> 
+#  summarise(n = n(), n_pond = sum(!is.na(Ponderador_sol_cred))) |> 
+#  mutate(factor = n / n_pond)
+```
+
+
+La tabla mostrada arriba, con intervalos de confianza, ahora resulta en:
+
+```{r}
+tabla_5_dis <- dis_modulos_2 |>
+  group_by(tipo_modulo, m_cuest2) |> 
+  summarise(cat_1 = round(100 * survey_prop(vartype = "ci"), 2)) 
+tabla_5_dis
+```
+
+
+```{r}
+g5_pond_2 <- ggplot(tabla_5_dis, aes(x = tipo_modulo, y = cat_1, 
+  fill = factor(m_cuest2), label = cat_1)) + 
+  geom_col() + geom_text(position = position_stack(vjust = 0.5)) +
+  ggtitle("Ponderado 2")
+g5_no_pond + g5_pond_1 + g5_pond_2 + plot_layout(guides = 'collect')
+```
+Los dos análisis ponderados dan resultados similares, considerablemente
+distintos del análisis no ponderado.
+
+## Estimador de razón con variables auxiliares 
+
+
+Otro enfoque puede ser utilizar un estimador de razón para incrementar la 
+precisión:
+
+
+```{r}
+total_trans <- datos_cecyrd |> 
+  mutate(Origen = ifelse(Edo == "09", "CDMX", "Provincia")) |> 
+  group_by(Origen) |> 
+  count()
+
+encuesta_mod_tbl <- encuesta_pesos_tbl |> 
+  group_by(Origen, Dtto, modulo, n_modulos, dias_trabajados) |> 
+  summarise(num_reg = sum(registrado_sistema), 
+            num_no_reg = sum(!registrado_sistema)) |> 
+  group_by(Origen, Dtto) |> 
+  mutate(n_selec = n_distinct(modulo)) |>
+  ungroup() |>
+  left_join(modulos_distrito) |> 
+  left_join(turnos_tbl |> select(modulo = MODULO_IFE_ID, turnos = TURNOS) |> 
+              mutate(modulo = str_pad(modulo, 6, pad = "0"))) |> 
+  mutate(turnos = ifelse(is.na(turnos), 2, turnos)) |> 
+  mutate(p = ifelse(Origen == "CDMX", 1, (26/276) * (n_selec / n_modulos))) |> 
+  mutate(p = p  / dias_trabajados) |> 
+  left_join(total_trans |> select(Origen, n_cec = n)) 
+dis_upm_1 <- svydesign(id=~Dtto, strata = ~ Origen, probs = ~ p, 
+                       data = encuesta_mod_tbl,  nest = TRUE) |> 
+  as_survey_design()
+```
+
+
+```{r}
+res_factor <- dis_upm_1 |> 
+  summarise(est_razon = survey_ratio( num_no_reg, num_reg)) |> 
+  mutate(n = sum(total_trans$n)) |> 
+  mutate(n_est = n * est_razon, n_est_se = n * est_razon_se) |> 
+  rename(no_reg = n_est, no_reg_ee = n_est_se)
+res_factor
+```
+**Nota**: el error es considerablemente menor que el estimador anterior.
+
+
+Cortado por CDMX y noCDMX se ve como sigue:
+
+
+```{r}
+res_factor <- dis_upm_1 |> 
+  group_by(Origen) |> 
+  summarise(est_razon = survey_ratio(num_no_reg, num_reg )) |> 
+  left_join(total_trans) |> 
+  mutate(n_est = n * est_razon, n_est_se = n * est_razon_se) |> 
+  rename(no_reg = n_est, no_reg_ee = n_est_se)
+res_factor
+
+```
+
+Este estimador aprovecha la relación entre número de registrados y no registrados
+que se capturó en la encuesta:
+
+```{r}
+ggplot(encuesta_mod_tbl, aes(x = num_reg, y = num_no_reg)) + geom_point() +
+  geom_smooth(method = "lm", formula = y ~ -1 + x) + 
+  labs(subtitle = "Número de visitantes, por estatus de registro en cecyrd")
+```
+
+

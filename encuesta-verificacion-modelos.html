@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.466">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Verificación nacional muestral 2021</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<script src="encuesta-verificacion-modelos_files/libs/clipboard/clipboard.min.js"></script><script src="encuesta-verificacion-modelos_files/libs/quarto-html/quarto.js"></script><script src="encuesta-verificacion-modelos_files/libs/quarto-html/popper.min.js"></script><script src="encuesta-verificacion-modelos_files/libs/quarto-html/tippy.umd.min.js"></script><script src="encuesta-verificacion-modelos_files/libs/quarto-html/anchor.min.js"></script><link href="encuesta-verificacion-modelos_files/libs/quarto-html/tippy.css" rel="stylesheet"><link href="encuesta-verificacion-modelos_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><script src="encuesta-verificacion-modelos_files/libs/bootstrap/bootstrap.min.js"></script><link href="encuesta-verificacion-modelos_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet"><link href="encuesta-verificacion-modelos_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet"></head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Verificación nacional muestral 2021</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="estimación-de-indicadores" class="level2">
+<h2 class="anchored" data-anchor-id="estimación-de-indicadores">Estimación de indicadores</h2>
+<p>En esta parte veremos cómo reproducir la estimación actual de indicadores mediante paquetes de R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_light</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>act_tbl <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"datos/VNM2021_Actualizacion.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#cob_tbl &lt;- read_csv("datos/VNM2021_Cobertura.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(act_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Estrato"                   "UPM"                      
+ [3] "Ponderador"                "Edo"                      
+ [5] "Flag_LN"                   "Cred_Vigencia_2019_o_2020"
+ [7] "Cred_Vigencia_2021"        "Flag_CredRec_en_LN"       
+ [9] "TipoDto2017"               "Sexo_N"                   
+[11] "GposEdad_80"               "TSecc_U_y_NU_"            
+[13] "Flag_Tipo_de_Cedula_N"     "N_ReSecPad"               
+[15] "D_ReSecPad"                "N_ReDom"                  
+[17] "N_CDNR"                    "N_MiMpo"                  
+[19] "N_OMMEdo"                  "N_OEdo"                   
+[21] "N_OPais"                   "N_NSCaDo"                 
+[23] "N_MmoEdo"                  "N_Fall"                   
+[25] "N_CRecNHVivDR"             "SusDerPol"                
+[27] "VivDomErrSecc"             "OtrCauNoResDom"           
+[29] "NoViveDomDesCau"           "D_ReDom"                  
+[31] "N_ErrS"                    "D_ErrS"                   
+[33] "N_NoRec"                   "D_NoRec"                  
+[35] "N_NReVH"                   "D_NReVH"                  
+[37] "N_NRPNH"                   "D_NRPNH"                  
+[39] "N_DNoLo"                   "D_DNoLo"                  
+[41] "N_RHAE"                    "D_RHAE"                   
+[43] "N_Trabaja"                 "N_Estudia"                
+[45] "N_EnfuHosp"                "N_Viaje"                  
+[47] "N_AOC"                     "N_AusNoSabe"              
+[49] "D_Causa"                   "N_ToE_Mpo"                
+[51] "N_ToE_OMpoEdo"             "N_ToE_OtroEdo"            
+[53] "N_ToE_OtroPais"            "N_ToE_NoSabe"             
+[55] "N_RegDia"                  "N_MenUM"                  
+[57] "N_UaSeiMe"                 "N_MasSeisMMen1Añ"         
+[59] "N_Mas_1_Añ"                "N_TANE"                   
+[61] "N_AusTemp_6MoM"            "N_AusTemp_Mas6M"          
+[63] "N_AusTemp_NoSabe"          "D_Tiempo"                 
+[65] "N_Mod_11_1"                "N_Mod_11_2"               
+[67] "D_Mod_11_1_y_2"            "N_Mod_AtenMB"             
+[69] "N_Mod_AtenB"               "N_Mod_AtenR"              
+[71] "N_Mod_AtenMal"             "N_Mod_AtenMuyMal"         
+[73] "N_Mod_AtenNoRec"           "N_Mod_Aten_MB_y_B"        
+[75] "N_Mod_Aten_Reg_Mal_y_MM"   "D_Mod_11_5"               
+[77] "N_Mod_12_3_1"              "N_Mod_12_3_2"             
+[79] "N_Mod_12_3_3"              "N_Mod_12_3_4"             
+[81] "N_Mod_12_3_5"              "D_Mod_12_3"               
+[83] "N_Mod_12_4_1"              "N_Mod_12_4_2"             
+[85] "N_Mod_12_4_3"              "N_Mod_12_4_4"             
+[87] "D_Mod_12_4"               </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>act_tbl <span class="ot">&lt;-</span> act_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">/</span> Ponderador)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>El diseño es estratificado PPT con reemplazo, usamos aproximación de 1 etapa para errores estándar. El diseño se especifica como:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dis_act <span class="ot">&lt;-</span> <span class="fu">svydesign</span>(<span class="at">id =</span> <span class="sc">~</span>UPM, <span class="at">strata =</span> <span class="sc">~</span>Estrato, <span class="at">probs =</span> <span class="sc">~</span>p,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> act_tbl) <span class="sc">|&gt;</span> <span class="fu">as_survey_design</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Replicamos algunos resultados de tabla 5.1.1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dis_act <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Flag_LN) <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">reseccion =</span> <span class="fu">survey_ratio</span>(N_ReSecPad, D_ReSecPad), </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">redomicilio =</span> <span class="fu">survey_ratio</span>(N_ReDom, D_ReDom)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flag_LN <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  Flag_LN reseccion reseccion_se redomicilio redomicilio_se
+    &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;
+1       1     0.862      0.00269       0.775        0.00325</code></pre>
+</div>
+</div>
+<p>Replicamos algunos resultados por tipo de sección:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dis_act <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(TSecc_U_y_NU_, Flag_LN) <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">reseccion =</span> <span class="fu">survey_ratio</span>(N_ReSecPad, D_ReSecPad), </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">redomicilio =</span> <span class="fu">survey_ratio</span>(N_ReDom, D_ReDom)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"re"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">value =</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> value, <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flag_LN <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 4
+# Groups:   TSecc_U_y_NU_ [2]
+  TSecc_U_y_NU_ Flag_LN name           value
+          &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+1             1       1 reseccion      85.2 
+2             1       1 reseccion_se    0.35
+3             1       1 redomicilio    75.2 
+4             1       1 redomicilio_se  0.41
+5             2       1 reseccion      88.4 
+6             2       1 reseccion_se    0.42
+7             2       1 redomicilio    82.7 
+8             2       1 redomicilio_se  0.57</code></pre>
+</div>
+</div>
+<p>Y finalmente, replicamos la estimación de fallecidos no reportados:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dis_act <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Flag_LN) <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_fallecidos =</span> <span class="fu">survey_ratio</span>(<span class="dv">100</span> <span class="sc">*</span> N_Fall, D_ReDom)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flag_LN <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  Flag_LN p_fallecidos p_fallecidos_se
+    &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;
+1       1        0.988          0.0573</code></pre>
+</div>
+</div>
+</section>
+<section id="estimación-por-estado" class="level2">
+<h2 class="anchored" data-anchor-id="estimación-por-estado">Estimación por estado</h2>
+<p>Ahora construimos estimaciones por Estado:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>resumen_1 <span class="ot">&lt;-</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  dis_act <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Edo, Flag_LN) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop =</span> <span class="fu">survey_ratio</span>(<span class="dv">100</span> <span class="sc">*</span> N_Fall, D_ReDom)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flag_LN <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>g_1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(resumen_1, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Edo), <span class="at">y =</span> prop, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">ymin =</span> prop <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> prop_se,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">ymax =</span> prop <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> prop_se)) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_linerange</span>() <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.2</span>, <span class="dv">3</span>)) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Proporción fallecidos"</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>g_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Algunos intervalos cruzan 0. Los errores son grandes en términos relativos (de 50-100% aproximadamente).</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(resumen_1, <span class="fu">aes</span>(<span class="at">x =</span> prop,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">y =</span> <span class="dv">2</span> <span class="sc">*</span> prop_se)) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="fl">0.5</span>, <span class="at">intercept =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"Estimaciones fallecidos por estado y error estándar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="modelos-para-estimación-por-estado" class="level2">
+<h2 class="anchored" data-anchor-id="modelos-para-estimación-por-estado">Modelos para estimación por estado</h2>
+<p>La primera estrategia es utilizar variables auxiliares. En este caso el grupo de edad es una variable importante:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>resumen_edad_fallecidos <span class="ot">&lt;-</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  dis_act <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(GposEdad_80, Flag_LN) <span class="sc">|&gt;</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_fallecidos =</span> <span class="fu">survey_ratio</span>(<span class="dv">100</span> <span class="sc">*</span> N_Fall, D_ReDom)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flag_LN <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(resumen_edad_fallecidos, </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(GposEdad_80), <span class="at">y =</span> p_fallecidos, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">ymin =</span> p_fallecidos <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> p_fallecidos_se,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">ymax =</span> p_fallecidos <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> p_fallecidos_se)) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_linerange</span>() <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>A nivel estrato, tenemos el siguiente resumen:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>resumen_estrato_fallecidos <span class="ot">&lt;-</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  dis_act <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Edo, Estrato, Flag_LN) <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_fallecidos =</span> <span class="fu">survey_ratio</span>(<span class="dv">100</span> <span class="sc">*</span> N_Fall, D_ReDom),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_1a7 =</span> <span class="fu">survey_mean</span>(<span class="dv">100</span> <span class="sc">*</span> (GposEdad_80 <span class="sc">&lt;=</span> <span class="dv">7</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flag_LN <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(resumen_estrato_fallecidos, <span class="fu">aes</span>(<span class="at">x =</span> p_1a7, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">y =</span> p_fallecidos)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">span =</span> <span class="dv">1</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Recomendación 1: postestratificación
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Postestratificar por estrato x grupos de edad puede ayudar en la estimación. Los valores poblacionales relevantes están disponibles en el padrón</p>
+</div>
+</div>
+</section>
+<section id="modelo-bayesiano" class="level2">
+<h2 class="anchored" data-anchor-id="modelo-bayesiano">Modelo bayesiano</h2>
+<p>En esta sección mostramos una manera de estimar utilizando modelos bayesianos.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Recomendación 2: uso de modelos para estimación
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Los intervalos de confianza usuales, para la estimación de proporciones chicas, tienen mala cobertura. Aunque hay intervalos alternativos, una manera más flexible de resolver este problema es utilizando modelos bayesianos.</p>
+</div>
+</div>
+<p>Preparamos datos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>datos_mod_tbl <span class="ot">&lt;-</span> act_tbl <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tipo =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    (Cred_Vigencia_2019_o_2020 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> Cred_Vigencia_2021), <span class="dv">1</span>, <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Estrato, UPM, Edo, tipo, N_Fall,  D_ReDom, Ponderador, Flag_LN, GposEdad_80) <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flag_LN <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Estrato, UPM, Edo, tipo) <span class="sc">|&gt;</span> </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_obs =</span> <span class="fu">sum</span>(N_Fall), </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">d_redom =</span> <span class="fu">sum</span>(D_ReDom),</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_edad =</span> <span class="fu">sum</span>(GposEdad_80 <span class="sc">&lt;=</span> <span class="dv">7</span>),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">ponderador =</span> <span class="fu">sum</span>(Ponderador <span class="sc">*</span> D_ReDom),</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Estrato) <span class="sc">|&gt;</span> </span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p_edad =</span> <span class="fu">sum</span>(n_edad) <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">upm_num =</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(UPM))) <span class="sc">|&gt;</span> </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">estrato_num =</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(Estrato)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Estrato', 'UPM', 'Edo'. You can override
+using the `.groups` argument.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="st">"stan/actualizacion-prop.stan"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(<span class="st">"stan/actualizacion-prop.stan"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>data {
+  int&lt;lower=0&gt; N;
+  int&lt;lower=0&gt; num_secciones;
+  int&lt;lower=0&gt; num_estratos;
+  int&lt;lower=0&gt; num_estados;
+  real gamma;
+  real gamma_de;
+  array[N] int y;
+  array[N] int n;
+  vector[N] ponderador;
+  array[N] int estrato;
+  array[N] int estado;
+  array[N] int tipo_cred;
+  array[N] int seccion;
+  //array[N] real p_edad;
+  array[num_secciones] int estrato_secc;
+}
+
+// The parameters accepted by the model. Our model
+// accepts two parameters 'mu' and 'sigma'.
+parameters {
+  real beta;
+  matrix[num_estratos, 2] beta_e;
+  real beta_edad;
+  //vector[num_estratos] beta_e;
+  //vector[2] beta_tipo;
+  vector[num_secciones] beta_raw;
+  array[num_estratos] real&lt;lower=0&gt; sigma;
+}
+
+transformed parameters {
+  vector[N] alpha;
+  vector[num_secciones] beta_secc;
+  
+  for(j in 1:num_secciones){
+    beta_secc[j] = beta_raw[j] * sigma[estrato_secc[seccion[j]]]; 
+  }
+  
+  for(i in 1:N){
+    //alpha[i] = beta + beta_e[estrato[i]] + beta_tipo[tipo_cred[i]] + beta_secc[seccion[i]]; 
+    alpha[i] = beta + beta_e[estrato[i], tipo_cred[i]] +  beta_secc[seccion[i]];
+    //  beta_edad * p_edad[i]   
+  }
+  
+}
+
+model {
+  y ~ binomial_logit(n, alpha);
+  beta ~ normal(gamma, gamma_de);
+  to_vector(beta_e) ~ normal(0, 1);
+  //beta_tipo ~ normal(0, 1);
+  beta_raw ~ normal(0, 1);
+  beta_edad ~ normal(0, 1);
+  sigma ~ normal(0, 0.25);
+}
+
+generated quantities {
+  vector[num_estados] total_estado;
+  vector[num_estados] total_lista_estado;
+  real total;
+  real total_lista;
+  real prop;
+  vector[num_estados] prop_estado;
+  array[N] int y_rep;
+  
+  total = 0;
+  total_lista = 0;
+  for(k in 1:num_estados){
+    total_estado[k] = 0;
+    total_lista_estado[k] = 0;
+  }
+  for(i in 1:N){
+    total += ponderador[i] * inv_logit(alpha[i]);
+    total_lista += ponderador[i];
+    total_estado[estado[i]] += ponderador[i] * inv_logit(alpha[i]);
+    total_lista_estado[estado[i]] += ponderador[i];
+  }
+  for(k in 1:num_estados){
+    prop_estado[k] = total_estado[k] / total_lista_estado[k];
+  }
+  prop = total / total_lista;
+  for(i in 1:N){
+    y_rep[i] = binomial_rng(n[i] , inv_logit(alpha[i]));
+  }
+}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>secciones_tbl <span class="ot">&lt;-</span> datos_mod_tbl <span class="sc">|&gt;</span> <span class="fu">select</span>(estrato_num, upm_num) <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">arrange</span>(upm_num)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>estrato_secc <span class="ot">&lt;-</span> secciones_tbl<span class="sc">$</span>estrato_num</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>datos_lst <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">gamma =</span> <span class="sc">-</span><span class="dv">5</span>, <span class="at">gamma_de =</span> <span class="dv">1</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">N =</span> <span class="fu">nrow</span>(datos_mod_tbl),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">num_secciones =</span> <span class="fu">max</span>(datos_mod_tbl<span class="sc">$</span>upm_num),</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">num_estados =</span> <span class="dv">32</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">num_estratos =</span> <span class="fu">max</span>(datos_mod_tbl<span class="sc">$</span>estrato_num),</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> datos_mod_tbl<span class="sc">$</span>n_obs,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n =</span> datos_mod_tbl<span class="sc">$</span>d_redom,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">tipo_cred =</span> datos_mod_tbl<span class="sc">$</span>tipo,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ponderador =</span> datos_mod_tbl<span class="sc">$</span>ponderador,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">estrato =</span> datos_mod_tbl<span class="sc">$</span>estrato_num,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">seccion =</span> datos_mod_tbl<span class="sc">$</span>upm_num,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">p_edad =</span> datos_mod_tbl<span class="sc">$</span>p_edad,</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">estado =</span> datos_mod_tbl<span class="sc">$</span>Edo,</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">estrato_secc =</span> estrato_secc</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>                  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ajuste <span class="ot">&lt;-</span> modelo<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_lst, </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">123</span>, </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel_chains =</span> <span class="dv">4</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">refresh =</span> <span class="dv">300</span>, </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_warmup =</span> <span class="dv">300</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_sampling =</span> <span class="dv">700</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 parallel chains...
+
+Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+Chain 1 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+Chain 3 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+Chain 4 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+Chain 2 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 1 finished in 10.4 seconds.
+Chain 3 finished in 10.5 seconds.
+Chain 4 finished in 10.5 seconds.
+Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 2 finished in 10.6 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 10.5 seconds.
+Total execution time: 10.8 seconds.</code></pre>
+</div>
+</div>
+<p>Estimación de proporción de fallecidos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ajuste<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"prop"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable, mean, sd) <span class="sc">|&gt;</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="dv">100</span> <span class="sc">*</span>.x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  variable  mean     sd
+  &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+1 prop      1.05 0.0573</code></pre>
+</div>
+</div>
+<p>Estimación por estado (intervalos de 95%):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>resumen_mod_edo <span class="ot">&lt;-</span> ajuste<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"prop_estado"</span>), </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="sc">~</span> <span class="fu">quantile</span>(.x, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(variable, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"x2"</span>, <span class="st">"k"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">k =</span> <span class="fu">as.integer</span>(k))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>g_2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(resumen_mod_edo, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(k), <span class="at">y =</span> <span class="dv">100</span><span class="sc">*</span>mean,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ymin =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="st">`</span><span class="at">2.5%</span><span class="st">`</span>  , <span class="at">ymax =</span> <span class="dv">100</span><span class="sc">*</span> <span class="st">`</span><span class="at">97.5%</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_linerange</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">0.2</span>, <span class="dv">3</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>g_2 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Comparación con método usual:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>resultados <span class="ot">&lt;-</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(resumen_1 <span class="sc">|&gt;</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(Edo, prop, prop_se) <span class="sc">|&gt;</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">estimacion =</span> <span class="st">"clasica"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">inf =</span> prop <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> prop_se,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sup =</span> prop <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> prop_se),</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>          resumen_mod_edo <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="at">Edo =</span> k, mean, sd, <span class="st">`</span><span class="at">2.5%</span><span class="st">`</span>, <span class="st">`</span><span class="at">97.5%</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">prop =</span> <span class="dv">100</span> <span class="sc">*</span> mean,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">prop_se =</span> <span class="dv">100</span> <span class="sc">*</span> sd,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">inf =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="st">`</span><span class="at">2.5%</span><span class="st">`</span>,</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sup =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="st">`</span><span class="at">97.5%</span><span class="st">`</span>,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">estimacion =</span> <span class="st">"bayesiana"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(mean, sd)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(resultados, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Edo), </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> prop, </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">ymin =</span> inf,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">ymax =</span> sup,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">colour =</span> estimacion)) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_linerange</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.5</span>)) <span class="sc">+</span> <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(resultados, <span class="fu">aes</span>(<span class="at">x =</span> prop, <span class="at">y =</span> <span class="dv">2</span> <span class="sc">*</span> prop_se, </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> estimacion)) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="fl">0.5</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>resultados <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Edo, prop_se, estimacion) <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> estimacion, <span class="at">values_from =</span> prop_se) <span class="sc">|&gt;</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> bayesiana, <span class="at">y =</span> clasica)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"Errores estándar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Idealmente, en estos modelos podemos simular toda la población (marco), evitando el uso de ponderadores. Esto también permite utilizar modelos que tomen en cuenta, por ejemplo, la composición de edades de cada sección o ump.</p>
+<p>En este ejemplo utilizamos los ponderadores (pues para este ejercicio no tenemos disponible el marco).</p>
+</div>
+</div>
+<section id="modelo-iniciales-para-modelo-bayesiano" class="level3">
+<h3 class="anchored" data-anchor-id="modelo-iniciales-para-modelo-bayesiano">Modelo: Iniciales para modelo bayesiano</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>modelo_sim <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="st">"./stan/actualizacion-prop-sim.stan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>sim_datos_lst <span class="ot">&lt;-</span> datos_lst</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>sims <span class="ot">&lt;-</span> modelo_sim<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_lst, </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1253</span>, </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">1</span>, </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel_chains =</span> <span class="dv">1</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">refresh =</span> <span class="dv">0</span>, </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_warmup =</span> <span class="dv">0</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_sampling =</span> <span class="dv">1000</span>,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_param =</span> <span class="cn">TRUE</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 1 chain...
+
+Chain 1 finished in 2.8 seconds.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>props_sim <span class="ot">&lt;-</span> sims<span class="sc">$</span><span class="fu">draws</span>(<span class="st">"prop"</span>, <span class="at">format =</span> <span class="st">"draws_df"</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(props_sim<span class="sc">$</span>prop, <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.99</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         1%         99% 
+0.004160899 0.145120780 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(props_sim, </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">sample =</span> prop)) <span class="sc">+</span> <span class="fu">geom_qq</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>estado_sim <span class="ot">&lt;-</span> sims<span class="sc">$</span><span class="fu">draws</span>(<span class="st">"prop_estado"</span>, <span class="at">format =</span> <span class="st">"draws_df"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">contains</span>(<span class="st">"prop_estado"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(name, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"x2"</span>, <span class="st">"k"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">k =</span> <span class="fu">as.integer</span>(k)) <span class="sc">|&gt;</span> <span class="fu">filter</span>(.draw <span class="sc">&lt;=</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Dropping 'draws_df' class as required metadata was removed.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Expected 3 pieces. Additional pieces discarded in 32000 rows [1, 2, 3,
+4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(estado_sim, <span class="fu">aes</span>(<span class="at">x =</span> k, <span class="at">y =</span> <span class="dv">100</span> <span class="sc">*</span> value)) <span class="sc">+</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>.draw) <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">5</span>, <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Puede haber considerable variación entre estados. También puede ser que todos tengan valores muy bajos.</li>
+<li>Existen algunas simulaciones algo extremas (por ejemplo, un estado con más de 10% de fallecidos), pero tienen probabilidad relativamente baja.</li>
+</ul>
+</section>
+<section id="modelo-chequeos-predictivos-posteriores" class="level3">
+<h3 class="anchored" data-anchor-id="modelo-chequeos-predictivos-posteriores">Modelo: Chequeos predictivos posteriores</h3>
+<p>Primero checamos si los intervalos posteriores cubren a los valores observados a nivel estrato:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>sim_post <span class="ot">&lt;-</span> ajuste<span class="sc">$</span><span class="fu">draws</span>(<span class="st">"y_rep"</span>, <span class="at">format =</span> <span class="st">"df"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">contains</span>(<span class="st">"y_rep"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(name, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"num_upm_tipo"</span>, <span class="st">"z"</span>),</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">convert =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Dropping 'draws_df' class as required metadata was removed.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sim_post_2 <span class="ot">&lt;-</span> sim_post <span class="sc">|&gt;</span>  <span class="fu">select</span>(.draw, num_upm_tipo, value) <span class="sc">|&gt;</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(datos_mod_tbl <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">num_upm_tipo =</span> <span class="fu">row_number</span>())) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining, by = "num_upm_tipo"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>sim_post_estrato <span class="ot">&lt;-</span> sim_post_2 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(.draw, Edo, Estrato) <span class="sc">|&gt;</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">sum</span>(value), <span class="at">n_obs =</span> <span class="fu">sum</span>(n_obs), <span class="at">d_redom =</span> <span class="fu">sum</span>(d_redom))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by '.draw', 'Edo'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>resumen_estrato <span class="ot">&lt;-</span> sim_post_estrato <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Edo, Estrato) <span class="sc">|&gt;</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">media_val =</span> <span class="fu">mean</span>(value), <span class="at">q95 =</span> <span class="fu">quantile</span>(value <span class="sc">/</span> (d_redom), <span class="fl">0.95</span>),</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">q5 =</span> <span class="fu">quantile</span>(value<span class="sc">/</span>(d_redom), <span class="fl">0.05</span>), </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">p_obs =</span> <span class="fu">first</span>(n_obs) <span class="sc">/</span> <span class="fu">first</span>(d_redom)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Edo'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(resumen_estrato, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(Estrato)), <span class="at">y =</span> p_obs, <span class="at">ymin =</span> q5, <span class="at">ymax =</span> q95)) <span class="sc">+</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_linerange</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Podemos comparar varias simulaciones con los resultados por UPM:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">58381</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>sim_post_upm <span class="ot">&lt;-</span> sim_post_2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(.draw <span class="sc">%in%</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="dv">8</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.draw, Edo, Estrato, UPM) <span class="sc">|&gt;</span> </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">sum</span>(value), <span class="at">n_obs =</span> <span class="fu">sum</span>(n_obs), <span class="at">d_redom =</span> <span class="fu">sum</span>(d_redom))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by '.draw', 'Edo', 'Estrato'. You can override
+using the `.groups` argument.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>datos_obs_tbl <span class="ot">&lt;&lt;-</span> sim_post_upm <span class="sc">|&gt;</span> </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Edo, Estrato, UPM, <span class="at">value =</span> n_obs, d_redom) <span class="sc">|&gt;</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(d_redom <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.draw =</span> <span class="st">"obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Adding missing grouping variables: `.draw`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>sim_post_upm_2 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  sim_post_upm <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">.draw =</span> <span class="fu">as.character</span>(.draw)), </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  datos_obs_tbl)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sim_post_upm_2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(d_redom<span class="sc">!=</span><span class="dv">0</span>), </span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">sample =</span> value <span class="sc">/</span> d_redom)) <span class="sc">+</span> </span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>(<span class="at">distribution =</span> stats<span class="sc">::</span>qnorm) <span class="sc">+</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> .draw) <span class="sc">+</span> <span class="fu">scale_y_sqrt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Podemos ver que los datos son consistentes con las simulaciones del modelo, en cuanto a cómo se distribuyen los fallecimientos a nivel UPM.</p>
+</section>
+</section>
+<section id="pruebas-con-otras-variables" class="level2">
+<h2 class="anchored" data-anchor-id="pruebas-con-otras-variables">Pruebas con otras variables</h2>
+<p>Abajo mostramos ejemplos de un modelo aplicable para proporciones que no estén cerca de 0 o 1, y puede ser de uso general:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>datos_mod_tbl <span class="ot">&lt;-</span> act_tbl <span class="sc">|&gt;</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tipo =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    (Cred_Vigencia_2019_o_2020 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> Cred_Vigencia_2021), <span class="dv">1</span>, <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Estrato, UPM, Edo, tipo, N_ReDom,  D_ReDom, Ponderador) <span class="sc">|&gt;</span> </span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Estrato, UPM, Edo, tipo) <span class="sc">|&gt;</span> </span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_obs =</span> <span class="fu">sum</span>(N_ReDom), </span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">d_redom =</span> <span class="fu">sum</span>(D_ReDom), </span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">Ponderador =</span> <span class="fu">sum</span>(Ponderador <span class="sc">*</span> D_ReDom),</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">upm_num =</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(UPM))) <span class="sc">|&gt;</span> </span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">estrato_num =</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(Estrato)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Estrato', 'UPM', 'Edo'. You can override
+using the `.groups` argument.</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>secciones_tbl <span class="ot">&lt;-</span> datos_mod_tbl <span class="sc">|&gt;</span> <span class="fu">select</span>(estrato_num, upm_num) <span class="sc">|&gt;</span> </span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">arrange</span>(upm_num)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>estrato_secc <span class="ot">&lt;-</span> secciones_tbl<span class="sc">$</span>estrato_num</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>datos_lst <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">gamma =</span> <span class="dv">0</span>, <span class="at">gamma_de =</span> <span class="fl">1.5</span>,</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">N =</span> <span class="fu">nrow</span>(datos_mod_tbl),</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">num_secciones =</span> <span class="fu">max</span>(datos_mod_tbl<span class="sc">$</span>upm_num),</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">num_estados =</span> <span class="dv">32</span>,</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">num_estratos =</span> <span class="fu">max</span>(datos_mod_tbl<span class="sc">$</span>estrato_num),</span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> datos_mod_tbl<span class="sc">$</span>n_obs,</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n =</span> datos_mod_tbl<span class="sc">$</span>d_redom,</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">tipo_cred =</span> datos_mod_tbl<span class="sc">$</span>tipo,</span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ponderador =</span> datos_mod_tbl<span class="sc">$</span>Ponderador,</span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">estrato =</span> datos_mod_tbl<span class="sc">$</span>estrato_num,</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">seccion =</span> datos_mod_tbl<span class="sc">$</span>upm_num,</span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">estado =</span> datos_mod_tbl<span class="sc">$</span>Edo,</span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">estrato_secc =</span> estrato_secc</span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>                  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="st">"stan/actualizacion-prop.stan"</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>ajuste <span class="ot">&lt;-</span> modelo<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_lst, </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">123</span>, </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, </span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel_chains =</span> <span class="dv">4</span>,</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">refresh =</span> <span class="dv">500</span>, <span class="co"># print update every 500 iters</span></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_warmup =</span> <span class="dv">300</span>,</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_sampling =</span> <span class="dv">700</span></span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 parallel chains...
+
+Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 1 Exception: binomial_logit_lpmf: Probability parameter[2675] is inf, but must be finite! (in '/var/folders/30/ztm9p9fx41v0s3w8g3qc9wd80000gn/T/RtmpRj0m26/model-141e61a10ca33.stan', line 48, column 2 to column 31)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 1 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 4 Exception: binomial_logit_lpmf: Probability parameter[4020] is -inf, but must be finite! (in '/var/folders/30/ztm9p9fx41v0s3w8g3qc9wd80000gn/T/RtmpRj0m26/model-141e61a10ca33.stan', line 48, column 2 to column 31)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Chain 4 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chain 2 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 1 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 3 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 4 Iteration: 301 / 1000 [ 30%]  (Sampling) 
+Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 1 finished in 16.9 seconds.
+Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 4 finished in 17.1 seconds.
+Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 2 finished in 21.0 seconds.
+Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+Chain 3 finished in 21.4 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 19.1 seconds.
+Total execution time: 21.5 seconds.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>ajuste<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"prop"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable, mean, sd) <span class="sc">|&gt;</span> </span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="dv">100</span> <span class="sc">*</span>.x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  variable  mean    sd
+  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
+1 prop      77.3 0.245</code></pre>
+</div>
+</div>
+</section>
+<section id="apéndice-subcobertura-de-intervalos-usuales" class="level2">
+<h2 class="anchored" data-anchor-id="apéndice-subcobertura-de-intervalos-usuales">Apéndice: Subcobertura de intervalos usuales</h2>
+<p>Para detalles, ver notas del curso de actualización (última sección), que compara tres métodos para obtener intervalos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span> <span class="co"># suponer la muestra efectiva es de 500</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>p_real <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>n_sim <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n_sim, n, p_real)</span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> x <span class="sc">/</span> n</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>ee <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>p)) <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>intervalos <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">rep =</span> <span class="dv">1</span><span class="sc">:</span>n_sim, </span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">inf =</span> p <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> ee, <span class="at">sup =</span> p <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> ee, <span class="at">p_real =</span> p_real, <span class="at">p =</span> p) <span class="sc">|&gt;</span> </span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cubre =</span> (inf <span class="sc">&lt;=</span> p_real <span class="sc">&amp;</span> sup <span class="sc">&gt;=</span> p_real))</span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>intervalos <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">cobertura =</span> <span class="fu">mean</span>(cubre))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  cobertura
+      &lt;dbl&gt;
+1     0.867</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(intervalos <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span>cubre), </span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> rep, <span class="at">y =</span> p, <span class="at">ymin =</span> inf, <span class="at">ymax =</span> sup)) <span class="sc">+</span></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_linerange</span>() <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> p_real, <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span> </span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="encuesta-verificacion-modelos_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

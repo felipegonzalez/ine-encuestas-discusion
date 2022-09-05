@@ -1,0 +1,497 @@
+---
+title: "Verificación nacional muestral 2021"
+format: html
+---
+
+
+## Estimación de indicadores 
+
+En esta parte veremos cómo reproducir 
+la estimación actual de indicadores mediante paquetes de R.
+
+```{r}
+#| message: false
+library(tidyverse)
+library(survey)
+library(srvyr)
+library(cmdstanr)
+theme_set(theme_light())
+```
+
+
+```{r}
+#| message: false
+act_tbl <- read_csv("datos/VNM2021_Actualizacion.csv")
+#cob_tbl <- read_csv("datos/VNM2021_Cobertura.csv")
+```
+
+
+```{r}
+names(act_tbl)
+```
+
+```{r}
+act_tbl <- act_tbl |> 
+  mutate(p = 1 / Ponderador)
+```
+
+El diseño es estratificado PPT con reemplazo, usamos aproximación 
+de 1 etapa para errores estándar. El diseño se especifica como:
+
+```{r}
+dis_act <- svydesign(id = ~UPM, strata = ~Estrato, probs = ~p,
+  data = act_tbl) |> as_survey_design()
+```
+
+Replicamos algunos resultados de tabla 5.1.1:
+
+```{r}
+dis_act |>
+  group_by(Flag_LN) |> 
+  summarise(
+    reseccion = survey_ratio(N_ReSecPad, D_ReSecPad), 
+    redomicilio = survey_ratio(N_ReDom, D_ReDom)) |> 
+  filter(Flag_LN == 1)
+```
+Replicamos algunos resultados por tipo de sección:
+
+```{r}
+dis_act |>
+  group_by(TSecc_U_y_NU_, Flag_LN) |> 
+  summarise(
+    reseccion = survey_ratio(N_ReSecPad, D_ReSecPad), 
+    redomicilio = survey_ratio(N_ReDom, D_ReDom)) |> 
+  pivot_longer(cols = starts_with("re")) |> 
+  mutate(value = round(100 * value, 2)) |> 
+  filter(Flag_LN == 1)
+```
+
+Y finalmente, replicamos la estimación de fallecidos no reportados:
+
+```{r}
+dis_act |>
+  group_by(Flag_LN) |> 
+  summarise(
+    p_fallecidos = survey_ratio(100 * N_Fall, D_ReDom)) |> 
+  filter(Flag_LN == 1)
+```
+## Estimación por estado
+
+Ahora construimos estimaciones por Estado:
+
+```{r}
+resumen_1 <- 
+  dis_act |>
+  group_by(Edo, Flag_LN) |> 
+  summarise(
+    prop = survey_ratio(100 * N_Fall, D_ReDom)) |> 
+  filter(Flag_LN == 1)
+```
+
+```{r}
+g_1 <- ggplot(resumen_1, 
+       aes(x = factor(Edo), y = prop, 
+           ymin = prop - 2 * prop_se,
+           ymax = prop + 2 * prop_se)) +
+  geom_point() +
+  geom_linerange() +
+  coord_flip() + ylim(c(-0.2, 3)) +
+  ylab("Proporción fallecidos")
+g_1
+```
+
+- Algunos intervalos cruzan 0. Los errores 
+son grandes en términos relativos (de 50-100% aproximadamente).
+
+```{r}
+ggplot(resumen_1, aes(x = prop,
+                               y = 2 * prop_se)) +
+  geom_point() + geom_abline(slope = 0.5, intercept = 0) + coord_equal() +
+  labs(subtitle = "Estimaciones fallecidos por estado y error estándar")
+```
+
+
+
+
+## Modelos para estimación por estado
+
+La primera estrategia es utilizar variables auxiliares. En este caso
+el grupo de edad es una variable importante:
+
+```{r}
+resumen_edad_fallecidos <- 
+  dis_act |>
+  group_by(GposEdad_80, Flag_LN) |> 
+  summarise(
+    p_fallecidos = survey_ratio(100 * N_Fall, D_ReDom)) |> 
+  filter(Flag_LN == 1)
+```
+
+```{r}
+ggplot(resumen_edad_fallecidos, 
+       aes(x = factor(GposEdad_80), y = p_fallecidos, 
+           ymin = p_fallecidos - 2 * p_fallecidos_se,
+           ymax = p_fallecidos + 2 * p_fallecidos_se)) +
+  geom_point() +
+  geom_linerange() +
+  coord_flip()
+```
+A nivel estrato, tenemos el siguiente resumen:
+
+```{r}
+resumen_estrato_fallecidos <- 
+  dis_act |>
+  group_by(Edo, Estrato, Flag_LN) |> 
+  summarise(
+    p_fallecidos = survey_ratio(100 * N_Fall, D_ReDom),
+    p_1a7 = survey_mean(100 * (GposEdad_80 <= 7))) |> 
+  filter(Flag_LN == 1)
+```
+
+```{r}
+ggplot(resumen_estrato_fallecidos, aes(x = p_1a7, 
+                                       y = p_fallecidos)) +
+  geom_point() + geom_smooth(method = "loess", span = 1, se = FALSE)
+```
+
+
+::: callout-note
+# Recomendación 1: postestratificación
+
+Postestratificar por estrato x grupos de edad puede
+ayudar en la estimación. Los valores poblacionales relevantes
+están disponibles en el padrón
+:::
+
+
+## Modelo bayesiano
+
+En esta sección mostramos una manera de estimar utilizando
+modelos bayesianos.
+
+::: callout-note
+# Recomendación 2: uso de modelos para estimación
+
+Los intervalos de confianza usuales, 
+para la estimación de proporciones chicas, tienen mala cobertura. 
+Aunque hay intervalos alternativos, una manera más flexible de resolver
+este problema es utilizando modelos bayesianos.
+:::
+
+Preparamos datos:
+
+```{r}
+datos_mod_tbl <- act_tbl |>
+  mutate(tipo = ifelse(
+    (Cred_Vigencia_2019_o_2020 == 1 | Cred_Vigencia_2021), 1, 2)) |> 
+  select(Estrato, UPM, Edo, tipo, N_Fall,  D_ReDom, Ponderador, Flag_LN, GposEdad_80) |>
+  filter(Flag_LN == 1) |> 
+  group_by(Estrato, UPM, Edo, tipo) |> 
+  summarise(n_obs = sum(N_Fall), 
+            d_redom = sum(D_ReDom),
+            n_edad = sum(GposEdad_80 <= 7),
+            ponderador = sum(Ponderador * D_ReDom),
+            n = n()) |>
+  group_by(Estrato) |> 
+  mutate(p_edad = sum(n_edad) / sum(n)) |> 
+  ungroup() |> 
+  mutate(upm_num = as.integer(factor(UPM))) |> 
+  mutate(estrato_num = as.integer(factor(Estrato)))
+```
+
+```{r}
+library(cmdstanr)
+modelo <- cmdstan_model("stan/actualizacion-prop.stan")
+cat(readLines("stan/actualizacion-prop.stan"), sep = "\n")
+```
+
+```{r}
+secciones_tbl <- datos_mod_tbl |> select(estrato_num, upm_num) |> 
+  unique() |> arrange(upm_num)
+estrato_secc <- secciones_tbl$estrato_num
+datos_lst <- list(gamma = -5, gamma_de = 1,
+                  N = nrow(datos_mod_tbl),
+                  num_secciones = max(datos_mod_tbl$upm_num),
+                  num_estados = 32,
+                  num_estratos = max(datos_mod_tbl$estrato_num),
+                  y = datos_mod_tbl$n_obs,
+                  n = datos_mod_tbl$d_redom,
+                  tipo_cred = datos_mod_tbl$tipo,
+                  ponderador = datos_mod_tbl$ponderador,
+                  estrato = datos_mod_tbl$estrato_num,
+                  seccion = datos_mod_tbl$upm_num,
+                  p_edad = datos_mod_tbl$p_edad,
+                  estado = datos_mod_tbl$Edo,
+                  estrato_secc = estrato_secc
+                  )
+```
+
+```{r}
+ajuste <- modelo$sample(
+  data = datos_lst, 
+  seed = 123, 
+  chains = 4, 
+  parallel_chains = 4,
+  refresh = 300, 
+  iter_warmup = 300,
+  iter_sampling = 700
+)
+```
+
+Estimación de proporción de fallecidos:
+
+```{r}
+ajuste$summary(c("prop")) |> 
+  select(variable, mean, sd) |> 
+  mutate(across(where(is.numeric), ~ 100 *.x))
+```
+
+Estimación por estado (intervalos de 95%):
+
+```{r}
+#| warning: false
+resumen_mod_edo <- ajuste$summary(c("prop_estado"), 
+    "mean", "sd", ~ quantile(.x, c(0.025, 0.975))) |> 
+  separate(variable, into = c("x", "x2", "k")) |> 
+  mutate(k = as.integer(k))
+g_2 <- ggplot(resumen_mod_edo, aes(x=factor(k), y = 100*mean,
+                            ymin = 100 * `2.5%`  , ymax = 100* `97.5%`)) +
+  geom_linerange() + geom_point() + coord_flip() + ylim(-0.2, 3)
+g_2 
+```
+
+Comparación con método usual:
+
+```{r}
+resultados <- 
+  bind_rows(resumen_1 |> 
+              select(Edo, prop, prop_se) |> 
+            mutate(estimacion = "clasica",
+                   inf = prop - 2 * prop_se,
+                   sup = prop + 2 * prop_se),
+          resumen_mod_edo |> select(Edo = k, mean, sd, `2.5%`, `97.5%`) |> 
+            mutate(prop = 100 * mean,
+                   prop_se = 100 * sd,
+                   inf = 100 * `2.5%`,
+                   sup = 100 * `97.5%`,
+                   estimacion = "bayesiana") |> 
+            select(-c(mean, sd)))
+```
+
+```{r}
+ggplot(resultados, aes(x = factor(Edo), 
+                       y = prop, 
+                       ymin = inf,
+                       ymax = sup,
+                       colour = estimacion)) +
+  geom_point() + geom_linerange(position = position_dodge(width = 0.5)) + coord_flip()
+```
+
+```{r}
+ggplot(resultados, aes(x = prop, y = 2 * prop_se, 
+  colour = estimacion)) +
+  geom_point() + geom_abline(slope = 0.5) 
+```
+
+```{r}
+resultados |>
+  select(Edo, prop_se, estimacion) |> 
+  pivot_wider(names_from = estimacion, values_from = prop_se) |> 
+ggplot(aes(x = bayesiana, y = clasica)) + geom_point() +
+  geom_abline() + labs(subtitle = "Errores estándar")
+```
+
+::: callout-note
+Idealmente, en estos modelos podemos simular toda la población (marco),
+evitando el uso de ponderadores. Esto también permite utilizar modelos
+que tomen en cuenta, por ejemplo, la composición de edades de cada
+sección o ump.
+
+En este ejemplo utilizamos los ponderadores (pues para este ejercicio no
+tenemos disponible el marco).
+:::
+
+
+### Modelo: Iniciales para modelo bayesiano
+
+```{r}
+modelo_sim <- cmdstan_model("./stan/actualizacion-prop-sim.stan")
+```
+```{r}
+sim_datos_lst <- datos_lst
+sims <- modelo_sim$sample(
+  data = datos_lst, 
+  seed = 1253, 
+  chains = 1, 
+  parallel_chains = 1,
+  refresh = 0, 
+  iter_warmup = 0,
+  iter_sampling = 1000,
+  fixed_param = TRUE
+)
+```
+
+```{r}
+props_sim <- sims$draws("prop", format = "draws_df")
+quantile(props_sim$prop, c(0.01, 0.99))
+ggplot(props_sim, 
+       aes(sample = prop)) + geom_qq()
+```
+
+```{r}
+estado_sim <- sims$draws("prop_estado", format = "draws_df") |> 
+  pivot_longer(cols = contains("prop_estado")) |> 
+  separate(name, into = c("x", "x2", "k")) |> 
+  mutate(k = as.integer(k)) |> filter(.draw <= 20)
+ggplot(estado_sim, aes(x = k, y = 100 * value)) +
+  geom_point() + facet_wrap(~.draw) +
+  geom_hline(yintercept = 5, colour = "red") +
+  scale_y_log10()
+```
+
+- Puede haber considerable variación entre estados. También puede ser que todos tengan valores muy bajos.
+- Existen algunas simulaciones algo extremas (por ejemplo, un estado con más de 10% de fallecidos), pero tienen probabilidad relativamente baja.
+
+### Modelo: Chequeos predictivos posteriores 
+
+Primero checamos si los intervalos posteriores cubren a los valores
+observados a nivel estrato:
+
+```{r}
+sim_post <- ajuste$draws("y_rep", format = "df") |> 
+  pivot_longer(cols = contains("y_rep")) |> 
+  separate(name, into = c("x", "y", "num_upm_tipo", "z"),
+           convert = TRUE)
+
+sim_post_2 <- sim_post |>  select(.draw, num_upm_tipo, value) |> 
+  left_join(datos_mod_tbl |> mutate(num_upm_tipo = row_number())) 
+sim_post_estrato <- sim_post_2 |> group_by(.draw, Edo, Estrato) |> 
+  summarise(value = sum(value), n_obs = sum(n_obs), d_redom = sum(d_redom))
+```
+
+```{r}
+resumen_estrato <- sim_post_estrato |> group_by(Edo, Estrato) |> 
+  summarise(media_val = mean(value), q95 = quantile(value / (d_redom), 0.95),
+         q5 = quantile(value/(d_redom), 0.05), 
+         p_obs = first(n_obs) / first(d_redom)) 
+  
+```
+```{r}
+ggplot(resumen_estrato, aes(x = as.integer(factor(Estrato)), y = p_obs, ymin = q5, ymax = q95)) +
+  geom_point(colour = "red") +
+  geom_linerange()
+```
+
+Podemos comparar varias simulaciones con los resultados por UPM:
+
+```{r}
+set.seed(58381)
+sim_post_upm <- sim_post_2 |> filter(.draw %in% sample(1:1000, 8)) |> 
+  group_by(.draw, Edo, Estrato, UPM) |> 
+  summarise(value = sum(value), n_obs = sum(n_obs), d_redom = sum(d_redom))
+```
+```{r}
+datos_obs_tbl <<- sim_post_upm |> 
+  select(Edo, Estrato, UPM, value = n_obs, d_redom) |>
+  unique() |> 
+  filter(d_redom != 0) |> 
+  mutate(.draw = "obs")
+sim_post_upm_2 <- bind_rows(
+  sim_post_upm |> mutate(.draw = as.character(.draw)), 
+  datos_obs_tbl)
+ggplot(sim_post_upm_2 |> filter(d_redom!=0), 
+       aes(sample = value / d_redom)) + 
+  geom_qq(distribution = stats::qnorm) +
+  facet_wrap(~ .draw) + scale_y_sqrt()
+```
+
+Podemos ver que los datos son consistentes con las simulaciones del modelo, en cuanto a cómo se distribuyen los fallecimientos a nivel UPM. 
+
+
+## Pruebas con otras variables
+
+Abajo mostramos ejemplos de un modelo aplicable para proporciones
+que no estén cerca de 0 o 1, y puede ser de uso general:
+
+```{r}
+#| code-fold: true
+datos_mod_tbl <- act_tbl |>
+  mutate(tipo = ifelse(
+    (Cred_Vigencia_2019_o_2020 == 1 | Cred_Vigencia_2021), 1, 2)) |> 
+  select(Estrato, UPM, Edo, tipo, N_ReDom,  D_ReDom, Ponderador) |> 
+  group_by(Estrato, UPM, Edo, tipo) |> 
+  summarise(n_obs = sum(N_ReDom), 
+            d_redom = sum(D_ReDom), 
+            Ponderador = sum(Ponderador * D_ReDom),
+            n = n()) |> 
+  ungroup() |> 
+  mutate(upm_num = as.integer(factor(UPM))) |> 
+  mutate(estrato_num = as.integer(factor(Estrato)))
+```
+
+```{r}
+#| code-fold: true
+secciones_tbl <- datos_mod_tbl |> select(estrato_num, upm_num) |> 
+  unique() |> arrange(upm_num)
+estrato_secc <- secciones_tbl$estrato_num
+datos_lst <- list(gamma = 0, gamma_de = 1.5,
+                  N = nrow(datos_mod_tbl),
+                  num_secciones = max(datos_mod_tbl$upm_num),
+                  num_estados = 32,
+                  num_estratos = max(datos_mod_tbl$estrato_num),
+                  y = datos_mod_tbl$n_obs,
+                  n = datos_mod_tbl$d_redom,
+                  tipo_cred = datos_mod_tbl$tipo,
+                  ponderador = datos_mod_tbl$Ponderador,
+                  estrato = datos_mod_tbl$estrato_num,
+                  seccion = datos_mod_tbl$upm_num,
+                  estado = datos_mod_tbl$Edo,
+                  estrato_secc = estrato_secc
+                  )
+```
+
+```{r}
+modelo <- cmdstan_model("stan/actualizacion-prop.stan")
+ajuste <- modelo$sample(
+  data = datos_lst, 
+  seed = 123, 
+  chains = 4, 
+  parallel_chains = 4,
+  refresh = 500, # print update every 500 iters
+  iter_warmup = 300,
+  iter_sampling = 700
+)
+```
+
+```{r}
+ajuste$summary(c("prop")) |> 
+  select(variable, mean, sd) |> 
+  mutate(across(where(is.numeric), ~ 100 *.x))
+```
+
+
+## Apéndice: Subcobertura de intervalos usuales
+
+Para detalles, ver notas del curso de actualización (última sección),
+que compara tres métodos para obtener intervalos.
+
+```{r}
+n <- 500 # suponer la muestra efectiva es de 500
+p_real <- 0.01
+n_sim <- 10000
+x <- rbinom(n_sim, n, p_real)
+p <- x / n
+ee <- sqrt(p * (1-p)) / sqrt(n)
+intervalos <- tibble(rep = 1:n_sim, 
+    inf = p - 1.96 * ee, sup = p + 1.96 * ee, p_real = p_real, p = p) |> 
+  mutate(cubre = (inf <= p_real & sup >= p_real))
+intervalos |> summarise(cobertura = mean(cubre))
+```
+
+```{r}
+ggplot(intervalos |> filter(!cubre), 
+  aes(x = rep, y = p, ymin = inf, ymax = sup)) +
+  geom_linerange() + geom_hline(yintercept = p_real, colour = "red") + 
+  geom_point()
+```
+
